@@ -103,7 +103,7 @@ int main(int argc, char *argv[]){
 
 // STAMPA MESSAGGI DI ERRORE
 void errorhandler(char *errorMessage){
-	printf("%s", errorMessage);
+	printf("%s\n", errorMessage);
 }
 
 // CHIUSURA DI WINSOCK32
@@ -123,10 +123,9 @@ int handleClient(const int serverSocket, const struct sockaddr_in *sad, const in
 
 	while(1){
 		if(recv(clientSocket, &rcv, sizeof(rcv), 0) < 0){
-			errorhandler("Failed to receive operation and operators, please check and retry.");
+			errorhandler("Failed to receive operation and operators");
 			return -1;
 		} else {
-			rcv.operation = ntohl(rcv.operation);
 			rcv.operand1 = ntohl(rcv.operand1);
 			rcv.operand2 = ntohl(rcv.operand2);
 
@@ -141,7 +140,7 @@ int handleClient(const int serverSocket, const struct sockaddr_in *sad, const in
 					snd.result = result;
 					snd.error = 0;
 					break;
-				case '*':
+				case 'x':
 					result = mult(rcv.operand1, rcv.operand2);
 					snd.result = result;
 					snd.error = 0;
@@ -157,22 +156,22 @@ int handleClient(const int serverSocket, const struct sockaddr_in *sad, const in
 					}
 					break;
 				case '=':
+					printf("Connection closed with %s", inet_ntoa(cad->sin_addr));
 					closesocket(clientSocket);
 					return 0;
 					break;
 				default:
 					snd.error = 1;
 					snd.result = 0;
-					break;
 			}
 		}
-	}
 
-	snd.result = htonl(snd.result);
-	snd.error = htonl(snd.error);
+		snd.result = htonl(snd.result);
+		snd.error = htonl(snd.error);
 
-	if(send(serverSocket, &snd, sizeof(snd), 0) < 0){
-		errorhandler("Failed to send result to the client, please check and retry");
-		return -1;
+		if(send(clientSocket, &snd, sizeof(snd), 0) < 0){
+			errorhandler("Failed to send result to the client");
+			return -1;
+		}
 	}
 }
