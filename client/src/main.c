@@ -1,7 +1,7 @@
 /*
  ============================================================================
  Name        : main.c
- Author      : Enrico Ciciriello
+ Author      : Enrico Ciciriello - Simone Summo
  Version     : 0.1
  Copyright   : MIT
  Description : Online calculator (client)
@@ -115,7 +115,6 @@ int userinteraction(int mySocket) {
         fflush(stdin);
         fflush(stdout);
         extractop(&sendp, s);
-        
         // Mark the closing of the connection 
         if (sendp.operation == '=') {
             active = 0;
@@ -166,13 +165,23 @@ int userinteraction(int mySocket) {
 }
 
 void extractop(cpack *pack, const char* s) {
-    printf("Strlen: %d", strlen(s));
-	if(strlen(s) >= 3) {
-        if (sscanf(s, "%c %d %d", pack->operation, pack->operand1, pack->operand2) < 3) {
+	int op1, op2;
+	char op;
+
+	if (s[0] == '=') {
+		pack->operation = s[0];
+		return;
+	}
+
+	if (strlen(s) >= 5) {
+        if (sscanf(s, "%c %d %d", &op, &op1, &op2) < 3) {
         	pack->operation = 'i';
-        } else if (pack->operation != '+' && pack->operation != '-' && pack->operation != '=' &&
-        		pack->operation != 'x' && pack->operation != '/') {
+        } else if (op != '+' && op != '-' && op != '=' && op != 'x' && op != '/') {
         	pack->operation = 'i';
+        } else {
+        	pack->operation = op;
+        	pack->operand1 = op1;
+        	pack->operand2 = op2;
         }
     } else {
     	pack->operation = 'i';
