@@ -1,3 +1,10 @@
+/*
+ * calculator.c
+ *
+ *  Created on: 23 nov 2021
+ *      Author: Simone Summo
+ */
+
 #include "calculator.h"
 
 int add(int a, int b){
@@ -19,3 +26,6 @@ int division(int a, int b){
 		return a / b;
 	}
 }
+
+
+
