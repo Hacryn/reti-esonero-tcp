@@ -1,3 +1,12 @@
+/*
+ * protocol.h
+ *
+ *  Created on: 23 nov 2021
+ *      Author: Enrico Ciciriello
+ */
+
+#ifndef PROTOCOL_H_
+#define PROTOCOL_H_
 
 // list of values
 #define PORT (60000)
@@ -28,3 +37,6 @@ typedef struct server_package {
 	int result;
 	int error;
 } spack;
+
+
+#endif /* PROTOCOL_H_ */
