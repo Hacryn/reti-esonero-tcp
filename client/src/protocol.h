@@ -1,7 +1,10 @@
 
+// list of values
+#define PORT (60000)
+
 // list of the errors
-#define ERROR1 "Errore: operazione non consentita"
-#define ERROR2 "Errore: impossibile dividere per 0"
+#define ERROR1 "Operation invalid"
+#define ERROR2 "Division for 0 (/0)"
 
 /*
  * The client send this package to the server
