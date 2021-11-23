@@ -80,7 +80,7 @@ int main(int argc, char *argv[]) {
     // Address configuration
     sad.sin_family = AF_INET;
     sad.sin_addr.s_addr = addr;
-    sad.sin_port = port;
+    sad.sin_port = htons(port);
 
     // Server connection
     if (connect(mySocket, (struct sockaddr_in*) &sad, sizeof(sad)) < 0) {
@@ -110,7 +110,9 @@ int userinteraction(int mySocket) {
         }
         
         // Read operation from the user
-        scanf("Insert operation: %s\n", s);
+        printf("Insert operation: ");
+        scanf("%64[^\n]", s);
+        fflush(stdin);
         fflush(stdout);
         extractop(&sendp, s);
         
@@ -164,8 +166,9 @@ int userinteraction(int mySocket) {
 }
 
 void extractop(cpack *pack, const char* s) {
-    if(strlen(s) >= 5) {
-        if (sscanf(s, "%c %d %d", pack->operation, pack->operand1, pack->operand2) != 3) {
+    printf("Strlen: %d", strlen(s));
+	if(strlen(s) >= 3) {
+        if (sscanf(s, "%c %d %d", pack->operation, pack->operand1, pack->operand2) < 3) {
         	pack->operation = 'i';
         } else if (pack->operation != '+' && pack->operation != '-' && pack->operation != '=' &&
         		pack->operation != 'x' && pack->operation != '/') {
