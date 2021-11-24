@@ -114,7 +114,7 @@ void clearwinsock(){
 }
 
 int handleClient(const int serverSocket, const struct sockaddr_in *sad, const int clientSocket, const struct sockaddr_in *cad){
-	printf("Connection established with %s \n", inet_ntoa(cad->sin_addr));
+	printf("Connection established with %s:%d \n", inet_ntoa(cad->sin_addr), ntohs(cad->sin_port);
 
 	cpack rcv;
 	spack snd;
