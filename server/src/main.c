@@ -113,8 +113,8 @@ void clearwinsock(){
 	#endif
 }
 
-int handleClient(const int serverSocket, const struct sockaddr_in *sad, const int clientSocket, const struct sockaddr_in *cad){
-	printf("Connection established with %s:%d \n", inet_ntoa(cad->sin_addr), ntohs(cad->sin_port);
+int handleClient(const int serverSocket, const struct sockaddr_in *sad, const int clientSocket, const struct sockaddr_in *cad) {
+	printf("Connection established with %s:%d \n", inet_ntoa(cad->sin_addr), ntohs(cad->sin_port));
 
 	cpack rcv;
 	spack snd;
@@ -179,7 +179,7 @@ int handleClient(const int serverSocket, const struct sockaddr_in *sad, const in
 		snd.error = htonl(snd.error);
 
 		// Sending results to client
-		if(send(clientSocket, &snd, sizeof(snd), 0) < 0){
+		if(send(clientSocket, &snd, sizeof(snd), 0) < 0) {
 			errorhandler("Failed to send result to the client");
 			return -1;
 		}
