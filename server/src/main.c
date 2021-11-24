@@ -114,7 +114,7 @@ void clearwinsock(){
 }
 
 int handleClient(const int serverSocket, const struct sockaddr_in *sad, const int clientSocket, const struct sockaddr_in *cad){
-	printf("Connection established with %s", inet_ntoa(cad->sin_addr));
+	printf("Connection established with %s \n", inet_ntoa(cad->sin_addr));
 
 	cpack rcv;
 	spack snd;
@@ -163,7 +163,7 @@ int handleClient(const int serverSocket, const struct sockaddr_in *sad, const in
 					break;
 				// Closing connection with client
 				case '=':
-					printf("Connection closed with %s", inet_ntoa(cad->sin_addr));
+					printf("Connection closed with %s. \n", inet_ntoa(cad->sin_addr));
 					closesocket(clientSocket);
 					return 0;
 					break;

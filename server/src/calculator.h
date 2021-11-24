@@ -1,10 +1,3 @@
-/*
- * calculator.h
- *
- *  Created on: 23 nov 2021
- *      Author: Simone Summo
- */
-
 #ifndef CALCULATOR_H_
 #define CALCULATOR_H_
 
