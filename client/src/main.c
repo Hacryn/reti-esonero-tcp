@@ -46,6 +46,7 @@ int main(int argc, char *argv[]) {
         port = PORT;
     } else if (argc < 3) {
         addr = inet_addr(argv[1]);
+        port = PORT;
 
         if(addr == INADDR_NONE) {
             errormsg("Address invalid, default address selected");
@@ -115,10 +116,6 @@ int userinteraction(int mySocket) {
         fflush(stdin);
         fflush(stdout);
         extractop(&sendp, s);
-        // Mark the closing of the connection 
-        if (sendp.operation == '=') {
-            active = 0;
-        }
 
         // Send the package to the server
         if (sendp.operation != 'i') {
@@ -129,7 +126,7 @@ int userinteraction(int mySocket) {
                 errormsg("Failed to send operation to the server, please check and retry");
                 errorc++;
             } else {
-                // Receive the result from the server
+            	// Receive the result from the server
                 if (recv(mySocket, &recvp, sizeof(recvp), 0) < 0) {
                     errormsg("Failed to receive operation from the server, please check and retry");
                     errorc++;
@@ -137,6 +134,11 @@ int userinteraction(int mySocket) {
                     errorc = 0;
                     recvp.error = ntohl(recvp.error);
                     recvp.result = ntohl(recvp.result);
+
+                    // Mark the closing of the connection
+                    if (sendp.operation == '=') {
+                    	return 0;
+                    }
 
                     // If error, inform the user
                     if(recvp.error != 0) {
