@@ -64,7 +64,7 @@ int main(int argc, char *argv[]){
 	struct sockaddr_in sad;
 	sad.sin_family = AF_INET;
 	sad.sin_addr.s_addr = inet_addr("127.0.0.1");
-	sad.sin_port = htons(PORT);
+	sad.sin_port = htons(port);
 	if(bind(mySocket, (struct sockaddr_in *) &sad, sizeof(sad)) < 0){
 		errorhandler("bind() failed. \n");
 		closesocket(mySocket);
