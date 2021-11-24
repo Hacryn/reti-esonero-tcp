@@ -35,7 +35,7 @@ int main(int argc, char *argv[]){
 		port = atoi(argv[1]);
 	} else {
 		port = PORT;
-		if(port < 0){
+		if(port < 1 || port > 65535){
 			printf("bad port number %s \n", argv[1]);
 			return 0;
 		}
