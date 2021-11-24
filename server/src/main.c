@@ -22,10 +22,10 @@
 #include <unistd.h>
 #endif
 
-#define QLEN 6 		// size of request queue
+#define QLEN 6 		
 #define BUFFLENGTH 64
 
-void errorhandler(char *errorMessage);
+void errorhandler(const char *errorMessage);
 void clearwinsock();
 int handleClient(const int serverSocket, const struct sockaddr_in *sad, const int clientSocket, const struct sockaddr_in *cad);
 
@@ -41,7 +41,7 @@ int main(int argc, char *argv[]){
 		}
 	}
 
-	// INIZIALIZZAZIONE PROGRAMMA WINDOWS
+	// Initialize WSA
 	#if defined WIN32
 	WSADATA wsaData;
 	int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
@@ -51,7 +51,7 @@ int main(int argc, char *argv[]){
 	}
 	#endif
 
-	// CREAZIONE SOCKET
+	// Socket creation
 	int mySocket;
 	mySocket = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if(mySocket < 0){
@@ -60,7 +60,7 @@ int main(int argc, char *argv[]){
 		return -1;
 	}
 
-	// ASSEGNAZIONE INDIRIZZO
+	// Address configuration
 	struct sockaddr_in sad;
 	sad.sin_family = AF_INET;
 	sad.sin_addr.s_addr = inet_addr("127.0.0.1");
@@ -72,7 +72,7 @@ int main(int argc, char *argv[]){
 		return -1;
 	}
 
-	// SETTAGGIO DELLA SOCKET ALL'ASCOLTO
+	// Socket configuration for listening
 	if(listen(mySocket, QLEN) < 0){
 		errorhandler("listen() failed. \n");
 		closesocket(mySocket);
@@ -80,7 +80,7 @@ int main(int argc, char *argv[]){
 		return -1;
 	}
 
-	// ACCETTARE UNA NUOVA CONNESSIONE
+	// Accepting a client
 	struct sockaddr_in cad;
 	int clientSocket;
 	int clientLen;
@@ -101,12 +101,12 @@ int main(int argc, char *argv[]){
 	}
 }
 
-// STAMPA MESSAGGI DI ERRORE
-void errorhandler(char *errorMessage){
+// Print error message
+void errorhandler(const char *errorMessage){
 	printf("%s\n", errorMessage);
 }
 
-// CHIUSURA DI WINSOCK32
+// Closing WSA
 void clearwinsock(){
 	#if defined WIN32
 	WSACleanup();
@@ -122,29 +122,35 @@ int handleClient(const int serverSocket, const struct sockaddr_in *sad, const in
 	int result;
 
 	while(1){
+		// Take data from client
 		if(recv(clientSocket, &rcv, sizeof(rcv), 0) < 0){
 			errorhandler("Failed to receive operation and operators");
 			return -1;
 		} else {
+			// Conversion data from network to host long
 			rcv.operand1 = ntohl(rcv.operand1);
 			rcv.operand2 = ntohl(rcv.operand2);
 
 			switch(rcv.operation){
+				// Addition
 				case '+':
 					result = add(rcv.operand1, rcv.operand2);
 					snd.result = result;
 					snd.error = 0;
 					break;
+				// Subtraction
 				case '-':
 					result = sub(rcv.operand1, rcv.operand2);
 					snd.result = result;
 					snd.error = 0;
 					break;
+				// Multiplication
 				case 'x':
 					result = mult(rcv.operand1, rcv.operand2);
 					snd.result = result;
 					snd.error = 0;
 					break;
+				// Division
 				case '/':
 					if(rcv.operand2 == 0){
 						snd.result = 0;
@@ -155,20 +161,24 @@ int handleClient(const int serverSocket, const struct sockaddr_in *sad, const in
 						snd.error = 0;
 					}
 					break;
+				// Closing connection with client
 				case '=':
 					printf("Connection closed with %s", inet_ntoa(cad->sin_addr));
 					closesocket(clientSocket);
 					return 0;
 					break;
+				// Unrecognized symbol
 				default:
 					snd.error = 1;
 					snd.result = 0;
 			}
 		}
-
+		
+		// Conversion data from host to network long
 		snd.result = htonl(snd.result);
 		snd.error = htonl(snd.error);
 
+		// Sending results to client
 		if(send(clientSocket, &snd, sizeof(snd), 0) < 0){
 			errorhandler("Failed to send result to the client");
 			return -1;
