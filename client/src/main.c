@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
             addr = inet_addr("127.0.0.1");
         }
 
-        if(port == 0) {
+        if(port < 1 || port > 65535) {
             errormsg("Port invalid, default port selected");
             port = PORT;
         }
