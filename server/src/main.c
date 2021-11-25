@@ -84,12 +84,12 @@ int main(int argc, char *argv[]){
 	struct sockaddr_in cad;
 	int clientSocket;
 	int clientLen;
-	printf("Waiting for a client to connect...");
+	printf("Waiting for a client to connect... \n");
 	while(1){
 		clientLen = sizeof(cad);
 		if((clientSocket = accept(mySocket, (struct sockaddr *) &cad, &clientLen)) < 0){
 			errorhandler("accept() failed. \n");
-			// CHIUSURA DELLA CONNESSIONE
+			// Closing connection
 			closesocket(clientSocket);
 			clearwinsock();
 			return 0;
@@ -163,7 +163,7 @@ int handleClient(const int serverSocket, const struct sockaddr_in *sad, const in
 					break;
 				// Closing connection with client
 				case '=':
-					printf("Connection closed with %s. \n", inet_ntoa(cad->sin_addr));
+					printf("Connection closed with %s:%d \n", inet_ntoa(cad->sin_addr), ntohs(cad->sin_port));
 					closesocket(clientSocket);
 					return 0;
 					break;
