@@ -157,6 +157,12 @@ int userinteraction(int mySocket) {
                             case 2:
                                 errormsg(ERROR2);
                                 break;
+			    case 3:
+                            	errormsg(ERROR3);
+                            	break;
+                            case 4:
+                            	errormsg(ERROR4);
+                            	break;
                             default:
                                 errormsg("Unknown error");
                         }
