@@ -166,6 +166,7 @@ int handleClient(const int serverSocket, const struct sockaddr_in *sad, const in
 				case '=':
 					printf("Connection closed with %s:%d \n", inet_ntoa(cad->sin_addr), ntohs(cad->sin_port));
 					closesocket(clientSocket);
+					printf("Waiting for a client to connect... \n");
 					return 0;
 					break;
 				// Unrecognized symbol
