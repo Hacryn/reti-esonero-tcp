@@ -16,3 +16,5 @@ If the ip address is not a valid ip address the client uses the default ip addre
 The calculator accepts only integer number and return an integer (or an error), <br> the command for the operations is: `[operation char] [integer] [integer]`. <br>
 The possible operation are: ‘+’ (addition), ‘–‘ (subtraction), ‘x’ (multiplication) and ‘/’ (division). <br>
 eg. `+ 1 1` = `1 + 1`.
+
+If the client cannot send/receive from the server for 3 or more times the client shutdown the connection.
