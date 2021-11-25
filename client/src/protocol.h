@@ -1,10 +1,3 @@
-/*
- * protocol.h
- *
- *  Created on: 23 nov 2021
- *      Author: Enrico Ciciriello
- */
-
 #ifndef PROTOCOL_H_
 #define PROTOCOL_H_
 

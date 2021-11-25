@@ -2,7 +2,7 @@
  ============================================================================
  Name        : main.c
  Author      : Enrico Ciciriello - Simone Summo
- Version     : 0.1
+ Version     :
  Copyright   : MIT
  Description : Online calculator (client)
  ============================================================================
