@@ -1,3 +1,5 @@
+#ifndef PROTOCOL_H_
+#define PROTOCOL_H_
 
 // list of values
 #define PORT (60000)
@@ -5,6 +7,8 @@
 // list of the errors
 #define ERROR1 "Operation invalid"
 #define ERROR2 "Division for 0 (/0)"
+#define ERROR3 "Integer overflow"
+#define ERROR4 "Integer underflow"
 
 /*
  * The client send this package to the server
@@ -28,3 +32,6 @@ typedef struct server_package {
 	int result;
 	int error;
 } spack;
+
+
+#endif /* PROTOCOL_H_ */
