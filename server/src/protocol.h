@@ -5,6 +5,8 @@
 // list of the errors
 #define ERROR1 "Operation invalid"
 #define ERROR2 "Division for 0 (/0)"
+#define ERROR3 "Integer overflow"
+#define ERROR4 "Integer underflow"
 
 /*
  * The client send this package to the server
