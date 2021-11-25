@@ -167,7 +167,7 @@ int userinteraction(int mySocket) {
                 }
             }
         } else {
-            errormsg("Operation format invalid or too big numbers (range: [-2147483648, +2147483647]");
+            errormsg("Operation format invalid or too big numbers (range: [-2147483648, +2147483647])");
         }
     }
 
