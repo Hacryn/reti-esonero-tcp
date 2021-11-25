@@ -189,7 +189,7 @@ void extractop(cpack *pack, const char* s) {
 		return;
 	}
 
-	if (strlen(s) >= 5 && strlen(s) < 24) {
+	if (strlen(s) >= 5 && strlen(s) < 26) {
         if (sscanf(s, "%c %lld %lld", &op, &op1, &op2) < 3) {
         	pack->operation = 'i';
         } else if (op != '+' && op != '-' && op != '=' && op != 'x' && op != '/') {
