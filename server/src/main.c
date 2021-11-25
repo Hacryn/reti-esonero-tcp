@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 #include "calculator.h"
 #include "protocol.h"
 
@@ -135,21 +136,54 @@ int handleClient(const int serverSocket, const struct sockaddr_in *sad, const in
 			switch(rcv.operation){
 				// Addition
 				case '+':
-					result = add(rcv.operand1, rcv.operand2);
-					snd.result = result;
-					snd.error = 0;
+					if ((rcv.operand2 > 0) && (rcv.operand1 > INT_MAX - rcv.operand2)){
+						// a + b overflow
+						snd.result = 0;
+						snd.error = 3;
+					} else if ((rcv.operand2 < 0) && (rcv.operand1 < INT_MIN - rcv.operand2)){
+						// a + b underflow
+						snd.result = 0;
+						snd.error = 4;
+					} else {
+						// no overflow or underflow
+						result = add(rcv.operand1, rcv.operand2);
+						snd.result = result;
+						snd.error = 0;
+					}
 					break;
 				// Subtraction
 				case '-':
-					result = sub(rcv.operand1, rcv.operand2);
-					snd.result = result;
-					snd.error = 0;
+					if ((rcv.operand2 < 0) && (rcv.operand1 > INT_MAX + rcv.operand2)){
+						// a - b overflow
+						snd.result = 0;
+						snd.error = 3;
+					} else if ((rcv.operand2 > 0) && (rcv.operand1 < INT_MIN + rcv.operand2)){
+						// a - b underflow
+						snd.result = 0;
+						snd.error = 4;
+					} else {
+						// no overflow or underflow
+						result = sub(rcv.operand1, rcv.operand2);
+						snd.result = result;
+						snd.error = 0;
+					}
 					break;
 				// Multiplication
 				case 'x':
-					result = mult(rcv.operand1, rcv.operand2);
-					snd.result = result;
-					snd.error = 0;
+					if (rcv.operand1 > INT_MAX / rcv.operand2){
+						// a x b overflow
+						snd.result = 0;
+						snd.error = 3;
+					} else if (rcv.operand1 < INT_MIN / rcv.operand2){
+						// a x b underflow
+						snd.result = 0;
+						snd.error = 4;
+					} else {
+						// no overflow or underflow
+						result = mult(rcv.operand1, rcv.operand2);
+						snd.result = result;
+						snd.error = 0;
+					}
 					break;
 				// Division
 				case '/':
