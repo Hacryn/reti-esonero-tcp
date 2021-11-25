@@ -26,6 +26,7 @@
 #define BUFFSIZE (256)
 
 int initializeWSA();
+void clearwinsock();
 void errormsg(const char* msg);
 int userinteraction(int mySocket);
 void extractop(cpack *pack, const char* s);
@@ -69,6 +70,7 @@ int main(int argc, char *argv[]) {
         }
     } else {
         errormsg("Too many arguments, retry with 2 argument (an address and a port)");
+        clearwinsock();
         return -1;
     }
 
@@ -77,6 +79,7 @@ int main(int argc, char *argv[]) {
 
 	if (mySocket < 0) {
 		errormsg("Socket creation failed, please retry");
+		clearwinsock();
 		return -1;
 	}
 
@@ -89,6 +92,7 @@ int main(int argc, char *argv[]) {
     if (connect(mySocket, (struct sockaddr_in*) &sad, sizeof(sad)) < 0) {
 		errormsg("Connection failed, check if server is online and available");
 		closesocket(mySocket);
+		clearwinsock();
 		return -1;
 	}
 
@@ -96,6 +100,7 @@ int main(int argc, char *argv[]) {
     returnv = userinteraction(mySocket);
     closesocket(mySocket);
     system("PAUSE");
+    clearwinsock();
     return returnv;
 }
 
@@ -208,6 +213,13 @@ int initializeWSA() {
 #endif
 	return 0;
 }
+
+void clearwinsock(){
+	#if defined WIN32
+	WSACleanup();
+	#endif
+}
+
 
 void errormsg(const char* msg) {
     printf("Error: %s\n", msg);
