@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 #include "protocol.h"
 
 #if defined WIN32
@@ -22,7 +23,7 @@
 #include <unistd.h>
 #endif
 
-#define BUFFSIZE (64)
+#define BUFFSIZE (256)
 
 int initializeWSA();
 void errormsg(const char* msg);
@@ -161,7 +162,7 @@ int userinteraction(int mySocket) {
                 }
             }
         } else {
-            errormsg("Operation format invalid, check the format is correct");
+            errormsg("Operation format invalid or too big numbers (range: [-2147483648, +2147483647]");
         }
     }
 
@@ -169,7 +170,7 @@ int userinteraction(int mySocket) {
 }
 
 void extractop(cpack *pack, const char* s) {
-	int op1, op2;
+	long long op1, op2;
 	char op;
 
 	if (s[0] == '=') {
@@ -177,15 +178,19 @@ void extractop(cpack *pack, const char* s) {
 		return;
 	}
 
-	if (strlen(s) >= 5) {
-        if (sscanf(s, "%c %d %d", &op, &op1, &op2) < 3) {
+	if (strlen(s) >= 5 && strlen(s) < 24) {
+        if (sscanf(s, "%c %lld %lld", &op, &op1, &op2) < 3) {
         	pack->operation = 'i';
         } else if (op != '+' && op != '-' && op != '=' && op != 'x' && op != '/') {
         	pack->operation = 'i';
         } else {
-        	pack->operation = op;
-        	pack->operand1 = op1;
-        	pack->operand2 = op2;
+        	if (op1 >= INT_MIN && op1 <= INT_MAX && op2 >= INT_MIN && op2 <= INT_MAX) {
+        		pack->operation = op;
+        		pack->operand1 = op1;
+        		pack->operand2 = op2;
+        	} else {
+        		pack->operation = 'i';
+        	}
         }
     } else {
     	pack->operation = 'i';
