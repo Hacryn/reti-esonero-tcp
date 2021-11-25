@@ -37,6 +37,7 @@ int main(int argc, char *argv[]) {
     int port;
 
     if (initializeWSA() == -1) {
+    	errormsg("WSA initialization failed");
     	return -1;
     }
 
@@ -93,6 +94,7 @@ int main(int argc, char *argv[]) {
     // Interaction with the user
     returnv = userinteraction(mySocket);
     closesocket(mySocket);
+    system("PAUSE");
     return returnv;
 }
 
